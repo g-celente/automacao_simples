@@ -8,7 +8,7 @@ def main():
     st.title("📊 Dashboard de Inadimplência")
     st.write("Análise de boletos atrasados e indicadores financeiros.")
 
-    indicadores, df_boletos = calcular_indicadores()
+    indicadores, df_boletos, data_boletos = calcular_indicadores()
 
     col1, col2, col3 = st.columns(3)
 
@@ -22,6 +22,24 @@ def main():
         st.metric(label="📅 Média de Atraso (dias)", value=f"{indicadores['Média de Atraso (dias)']:.1f}")
 
     st.divider()
+
+    st.write('Quantidades de Boletos Atrasados por dia:')
+
+    col4, col5, col6, col7 = st.columns(4)
+
+    with col4:
+        st.metric(label='Até 15 dias', value=data_boletos['Até 15 dias'])
+
+    with col5:
+        st.metric(label='Até 30 dias', value=data_boletos['Até 30 dias'])
+
+    with col6:
+        st.metric(label='Até 60 dias', value=data_boletos['Até 60 dias']) 
+
+    with col7:
+        st.metric(label='Mais que 60 dias', value=data_boletos['Mais que 60 dias']) 
+
+    
 
     st.subheader("📄 Boletos Atrasados")
     if not df_boletos.empty:

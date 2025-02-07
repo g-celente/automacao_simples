@@ -11,11 +11,25 @@ def filtrar_boletos(file_path):
 
     return boletos_vencidos, df
 
+def dias_boletos (df_boletos):
+    
+    df_boletos['Dias de Atraso'] = (datetime.today() - df_boletos['Data de Vencimento']).dt.days
+
+    data_boletos = {
+        "Até 15 dias": len(df_boletos[df_boletos['Dias de Atraso'] <= 15]),
+        "Até 30 dias": len(df_boletos[df_boletos['Dias de Atraso'] <= 30]),
+        "Até 60 dias": len(df_boletos[df_boletos['Dias de Atraso'] <= 60]),
+        "Mais que 60 dias": len(df_boletos[df_boletos['Dias de Atraso'] >= 90])
+    }
+
+    return data_boletos
+
 def calcular_indicadores():
 
     file_path = 'src/database/database.xlsx'
 
     df_boletos, df_total = filtrar_boletos(file_path)
+    data_boletos = dias_boletos(df_boletos)
 
     total_boletos_atrasados = len(df_boletos)
     total_boletos_emitidos = len(df_total)
@@ -32,4 +46,4 @@ def calcular_indicadores():
         "Média de Atraso (dias)": round(media_atraso, 2)
     }
 
-    return indicadores, df_boletos
+    return indicadores, df_boletos, data_boletos
